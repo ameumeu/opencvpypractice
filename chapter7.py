@@ -8,9 +8,9 @@ def empty(a):
 
 cv2.namedWindow("TrackBars")
 cv2.resizeWindow("TrackBars", 500, 758)
-cv2.createTrackbar("Hue Min", "TrackBars", 0, 179, empty)
-cv2.createTrackbar("Hue Max", "TrackBars", 179, 179, empty)
-cv2.createTrackbar("Sat Min", "TrackBars", 0, 255, empty)
+cv2.createTrackbar("Hue Min", "TrackBars", 66, 179, empty)
+cv2.createTrackbar("Hue Max", "TrackBars", 171, 179, empty)
+cv2.createTrackbar("Sat Min", "TrackBars", 63, 255, empty)
 cv2.createTrackbar("Sat Max", "TrackBars", 255, 255, empty)
 cv2.createTrackbar("Val Min", "TrackBars", 0, 255, empty)
 cv2.createTrackbar("Val Max", "TrackBars", 255, 255, empty)
@@ -29,10 +29,13 @@ while True:
     upper = np.array([h_max, s_max, v_max])
     mask = cv2.inRange(imgHSV, lower, upper)
 
-    cv2.imshow("Image", img)
-    cv2.imshow("ImageHSV", imgHSV)
+    imgResult = cv2.bitwise_and(img, img, mask=mask)
+    imgStack = np.hstack((img, imgHSV))
+    imgStack = np.hstack((imgStack, imgResult))
+
+    cv2.imshow("Result", imgStack)
     cv2.imshow("Mask", mask)
 
-    key = cv2.waitKey(1000g) & 0xFF
+    key = cv2.waitKey(3000) & 0xFF
     if key == 27:
         break
